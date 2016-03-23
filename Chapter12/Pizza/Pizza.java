@@ -7,17 +7,12 @@ Date Last Modified: March 2x, 2016
 Problem Statement:
 */
 
-// imports
-
 public class Pizza
 {
 	// variables
 	private boolean pepperoni, sausage, mushrooms;
 	private char size;
 
-	/**
-	* Default Constructor
-	*/
 	public Pizza(char size, boolean pepp, boolean saus, boolean mush)
 	{
 		this.size = size;
@@ -44,9 +39,34 @@ public class Pizza
 		return numToppings;
 	}
 
-	// main method
-	public static void main(String[] args)
-	{
-	} // end main method
+  public boolean getPepp()
+  {
+    return pepperoni;
+  }
+
+  public boolean getSaus()
+  {
+    return sausage;
+  }
+
+  public boolean getMush()
+  {
+    return mushrooms;
+  }
+
+  public String toString()
+  {
+    return ("Size: " + size + ", Pepperoni: " + pepperoni +
+            ", Sausage: " + sausage + ", Mushrooms: " + mushrooms);
+  }
+
+  public boolean equals(Object otherObject)
+  {
+    Pizza otherPizza = (Pizza)otherObject;
+    return (size == otherPizza.getSize() 
+            && pepperoni == otherPizza.getPepp()
+            && sausage == otherPizza.getSaus()
+            && mushrooms == otherPizza.getMush());
+  }
 
 } // end Pizza class

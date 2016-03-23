@@ -54,7 +54,9 @@ public class PizzaOrder
 		pizzas.addPizzaToOrder('s', false, false, false);
 		pizzas.addPizzaToOrder('l', true, true, false);
 		pizzas.addPizzaToOrder('s', true, true, false);
-		System.out.println((pizzas.numPizzas + 1) + " pizzas cost: " + pizzas.calcCost());
+    for (int i = 0; i < pizzas.numPizzas; i++)
+      System.out.println("Pizza " + (i + 1) + ": " + pizzas.order[i]);
+		System.out.println("The above " + (pizzas.numPizzas) + 
+                       " pizzas cost: " + pizzas.calcCost());
 	} // end main method
-
 } // end PizzaOrder class
