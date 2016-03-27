@@ -62,6 +62,7 @@ public class TrackPeople implements Serializable
 				{
 					System.out.println("Problem adding " + addThis.getName());
 				}
+        output.close();
 			}
 			else if (command[0].toLowerCase().charAt(0) == 'd')
 			{
@@ -77,16 +78,16 @@ public class TrackPeople implements Serializable
 					{
 						while (true)
 						{
-							Person check = (Person)inStream.readObject();
+							Person checkPerson = (Person)inStream.readObject();
 							if (check.getName().equals(name));
 							{
-								System.out.println(check);
+								System.out.println(checkPerson);
 							}
 						}
 					}
 					catch(EOFException e)
 					{
-						System.out.println("Reached end or records.");
+						System.out.println("Reached end of records.");
 					}
 					inStream.close();
 				}
@@ -104,23 +105,33 @@ public class TrackPeople implements Serializable
 			{
 				System.out.println("Please give me the name on the record you'd like to retrieve.");
 				String name = keyboard.nextLine();
-					ObjectInputStream inStream = new ObjectInputStream(new FileInputStream("People.txt"));
-					try
+				ObjectInputStream inStream;
+				ObjectOutputStream outStream;
+				try
+				{
+
+          // I need to find a way to write:
+          // if inStream.getName() != name
+          //   outStream.writeObject(inputStream's object)
+          // else
+          //   don't writeObject
+          
+          inStream = new ObjectInputStream(new FileInputStream("People.txt"));
+          outStream = new ObjectOutputStream(new FileOutputStream("People.txt"));
+					while(true)
 					{
-						while(true)
+						Person checkPerson = (Person)inStream.readObject();
+						if (check.getName().equals(name))
 						{
-							Person check = (Person)inStream.readObject();
-							if (check.getName().equals(name))
-							{
-								System.out.println(check);
-							}
+							System.out.println(checkPerson);
 						}
 					}
-					catch (EOFException e)
-					{
-						System.out.println("Reached end of file");
-					}
-					inStream.close();
+				}
+				catch (EOFException e)
+				{
+					System.out.println("Reached end of file");
+				}
+				inStream.close();
 			}
 			else if (command[0].toLowerCase().charAt(0) == 'g' && command[1].toLowerCase().equals("people"))
 			{
@@ -144,7 +155,7 @@ public class TrackPeople implements Serializable
 						while(true)
 						{
 							Person check = (Person)inStream.readObject();
-							if (!check.getBirthDate().precedes(minDate) && check.getBirthDate().precedes(maxDate))
+							if ( !check.getBirthDate().precedes(minDate) && check.getBirthDate().precedes(maxDate) )
 							{
 								System.out.println(check);
 							}
@@ -154,6 +165,7 @@ public class TrackPeople implements Serializable
 					{
 						System.out.println("Reached end of file");
 					}
+          inStream.close();
 				}
 				catch(ClassNotFoundException e)
 				{
