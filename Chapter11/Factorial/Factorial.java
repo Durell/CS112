@@ -47,7 +47,6 @@ public class Factorial
 				{
 					num = keyboard.nextInt();
 					keyboard.nextLine();
-					entered = true;
 				}
 				catch (InputMismatchException e)
 				{
@@ -66,10 +65,12 @@ public class Factorial
 				// factorial of a negative number is undefined
 				else if (num < 0)
 				{
-					System.out.println("Illegal argument.");
+					System.out.println("Illegal argument, negative factorial undefined here.");
 					entered = false;
 					System.out.print("Please try again > ");
 				}
+				else
+					entered = true;
 			}
 			System.out.println(" " + num + "! = " + 
 								calculateFactorial(num));

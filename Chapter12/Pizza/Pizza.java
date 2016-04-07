@@ -5,6 +5,8 @@ Programmer:         Durell Smith
 Date Last Modified: March 2x, 2016
 
 Problem Statement:
+Use given information to write Java code that implements the Pizza and
+PizzaOrder classes as given in UML from the book.
 */
 
 public class Pizza

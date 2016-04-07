@@ -5,6 +5,7 @@ Programmer:         Durell Smith
 Date Last Modified: February 9, 2016
 
 Problem Statement:
+
 */
 
 // imports
@@ -19,7 +20,6 @@ public class TrackPeople implements Serializable
 		Scanner keyboard = new Scanner(System.in);
 		Date today = new Date();
 		today.readInput(); // determine current day to determine ages
-		String response = "";
 		boolean done = false;
 
 		File checkNew = new File("People.txt");
@@ -40,7 +40,7 @@ public class TrackPeople implements Serializable
 		{
 			System.out.println("What would you like to do next?");
 			System.out.println("Add Record, Delete Record, Get Person, Get People or Quit");
-			response = keyboard.nextLine();
+			String response = keyboard.nextLine();
 			String[] command = response.split(" ");
 
 			// Add a Person to the record
@@ -57,20 +57,27 @@ public class TrackPeople implements Serializable
 				{
 					output = new AppendObjectOutputStream(new FileOutputStream("People.txt", true));
 					output.writeObject(addThis);
+	        output.close();
 				}
 				catch(IOException e)
 				{
 					System.out.println("Problem adding " + addThis.getName());
 				}
-        output.close();
 			}
 			else if (command[0].toLowerCase().charAt(0) == 'd')
 			{
+
+          // I need to find a way to write:
+          // if inStream.getName() != name
+          //   outStream.writeObject(inputStream's object)
+          // else
+          //   don't writeObject
+          
 				System.out.println("Please give me the name of the person you'd like to remove.");
 				String name = keyboard.nextLine();
 				// 
-				ObjectInputStream inStream;
-				ObjectOutputStream outStream;
+				ObjectInputStream inStream = null;
+				ObjectOutputStream outStream = null;
 				try
 				{
 					inStream = new ObjectInputStream(new FileInputStream("People.txt"));
@@ -79,7 +86,7 @@ public class TrackPeople implements Serializable
 						while (true)
 						{
 							Person checkPerson = (Person)inStream.readObject();
-							if (check.getName().equals(name));
+							if (checkPerson.getName().equals(name));
 							{
 								System.out.println(checkPerson);
 							}
@@ -89,7 +96,6 @@ public class TrackPeople implements Serializable
 					{
 						System.out.println("Reached end of records.");
 					}
-					inStream.close();
 				}
 				catch(ClassNotFoundException e)
 				{
@@ -100,28 +106,21 @@ public class TrackPeople implements Serializable
 					System.out.println("Problem opening file");
 
 				}
+				inStream.close();
+				outStream.close();
 			}
 			else if (command[0].toLowerCase().charAt(0) == 'g' && command[1].toLowerCase().equals("person"))
 			{
 				System.out.println("Please give me the name on the record you'd like to retrieve.");
 				String name = keyboard.nextLine();
-				ObjectInputStream inStream;
-				ObjectOutputStream outStream;
+				ObjectInputStream inStream = null;
 				try
 				{
-
-          // I need to find a way to write:
-          // if inStream.getName() != name
-          //   outStream.writeObject(inputStream's object)
-          // else
-          //   don't writeObject
-          
           inStream = new ObjectInputStream(new FileInputStream("People.txt"));
-          outStream = new ObjectOutputStream(new FileOutputStream("People.txt"));
 					while(true)
 					{
 						Person checkPerson = (Person)inStream.readObject();
-						if (check.getName().equals(name))
+						if (checkPerson.getName().equals(name))
 						{
 							System.out.println(checkPerson);
 						}
@@ -140,48 +139,47 @@ public class TrackPeople implements Serializable
 				int youngest = keyboard.nextInt();
 				System.out.println("What is the youngest age you'd like to retrieve?");
 				int oldest = keyboard.nextInt();
-				ObjectInputStream inStream;
+				keyboard.nextLine();
 				Date minDate = new Date(today);
 				oldest = minDate.getYear() - oldest;
 				minDate.setYear(oldest);
 				Date maxDate = new Date(today);
 				youngest = maxDate.getYear() - youngest;
 				maxDate.setYear(youngest);
+				ObjectInputStream inStream = null;
 				try
 				{
 					inStream = new ObjectInputStream(new FileInputStream("People.txt"));
-					try
+				}
+				catch(IOException e)
+				{
+					System.out.println("Problem opening file");
+				}
+				try
+				{
+					while(true)
 					{
-						while(true)
+						Person check = (Person)inStream.readObject();
+						if ( !check.getBirthDate().precedes(minDate) && check.getBirthDate().precedes(maxDate) )
 						{
-							Person check = (Person)inStream.readObject();
-							if ( !check.getBirthDate().precedes(minDate) && check.getBirthDate().precedes(maxDate) )
-							{
-								System.out.println(check);
-							}
+							System.out.println(check);
 						}
 					}
-					catch (EOFException e)
-					{
-						System.out.println("Reached end of file");
-					}
-          inStream.close();
+				}
+				catch (EOFException e)
+				{
+					System.out.println("Reached end of file");
 				}
 				catch(ClassNotFoundException e)
 				{
 					System.out.println("Class not found.");
 				}
-				catch(IOException e)
-				{
-					System.out.println("Problem opening file");
-
-				}
+				inStream.close();
 			}
 			else if (command[0].toLowerCase().charAt(0) == 'q')
 			{
 				System.exit(0);
 			}
-
 		}
 	} // end main method
 } // end TrackPeople class

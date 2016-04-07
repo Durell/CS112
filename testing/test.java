@@ -3,6 +3,7 @@ import java.util.Scanner;
 public class test
 {
 
+  /*
   public static boolean isInteger(String s) 
   {
     return isInteger(s,10);
@@ -18,14 +19,24 @@ public class test
         }
         if(Character.digit(s.charAt(i),radix) < 0) return false;
     }
+  }
+  */
  
   public static void main(String[] args)
   {
 
+    String hello = "Hello. world!";
+    int end = hello.length() - 1;
+    char a = hello.charAt(end);
+    System.out.println(a);
+    System.out.println(hello.replaceAll("[^a-zA-Z]", "").toLowerCase());
+
+
+
+/*
     String s = "1234";
     System.out.println(isInteger(s, 3));
 
-    /*
   	try
   	{
   		aMethod();

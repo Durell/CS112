@@ -16,7 +16,7 @@ public class Handshakes
 	{
 		if (n < 1)
 		{
-			System.out.println("Room must have at leaast 1 person.");
+			System.out.println("Room must have at least 1 person.");
 			return 0;
 		}
 		else if (n == 1)
@@ -30,6 +30,7 @@ public class Handshakes
 		System.out.println("Supposing everyone in a room must shake hands: ");
 		for (int i = 12; i >= 0; i--)
 			System.out.println(i + " people will produce " + handshakes(i) + " handshakes.");
-		System.out.println("What about -1? > " + handshakes(-1));
+		System.out.println("What if I pass -1 people? ");
+		System.out.println( handshakes(-1) + " handshakes.");
 	} // end main method
 } // end Handshakes class
