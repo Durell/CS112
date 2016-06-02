@@ -1,6 +1,6 @@
 /*
 Chapter No. 15 - Project 6 (Page 895)
-File Name:          LinkedLists.java
+File Name:          LinkedList3.java
 Programmer:         Durell Smith
 Date Last Modified: April x, 2016
 
@@ -16,7 +16,7 @@ extend the Comparable interface. Write a suitable test program.
 
 // imports
 
-public class LinkedLists<T>
+public class LinkedList3<T>
 {
     private class Node<T>
     {
@@ -36,11 +36,47 @@ public class LinkedLists<T>
         }
      }//End of Node<T> inner class
 
-    private Node<T> head;
+     public class List3Iterator
+     {
+        private Node<T> position, previous;
 
-    public LinkedLists( )
+        public List3Iterator()
+        {
+            position = tail.next;
+            previous = null;
+        }
+
+        public void restart()
+        {
+            position = tail.next;
+            previous = null;
+        }
+
+        public T next()
+        {
+            T item = tail.link;
+            previous = position;
+            position = position.link;
+            return item;
+        }
+
+        public void delete()
+        {
+            if (position == null)
+                throw new IllegalStateException();
+            else if (previous == null)
+            {
+                tail.link = tail.link.link;
+            }
+        }
+
+     }
+
+    private Node<T> tail;
+
+    public LinkedList3( )
     {
-        head = null;
+        tail = null;
     }
 
     /**
@@ -49,18 +85,29 @@ public class LinkedLists<T>
     */
     public void addToStart(T itemData)
     {
-        head = new Node<T>(itemData, head);
+        Node<T> newNode = new Node();
+        newNode.data = itemData;
+        if (tail == null)
+        {
+            tail = newNode;
+            tail.link = tail;
+        }
+        else
+        {
+            newNode.link = tail.link;
+            tail.link = newNode;
+        }
     }
 
     /**
-     Removes the head node and returns true if the list contains at least
+     Removes the tail node and returns true if the list contains at least
      one node. Returns false if the list is empty.
     */
     public boolean deleteHeadNode( )
     {
-        if (head != null)
+        if (tail != null)
         {
-            head = head.link;
+            tail.link = tail.link.link;
             return true;
         }
         else
@@ -73,8 +120,8 @@ public class LinkedLists<T>
     public int size( )
     {
         int count = 0;
-        Node<T> position = head;
-        while (position != null)
+        Node<T> position = tail.link;
+        while (position != tail)
         {
             count++;
             position = position.link;
@@ -93,9 +140,9 @@ public class LinkedLists<T>
     */
     private Node<T> find(T target)
     {
-        Node<T> position = head;
+        Node<T> position = tail.link;
         T itemAtPosition;
-        while (position != null)
+        while (position != tail)
         {
             itemAtPosition = position.data;
             if (itemAtPosition.equals(target))
@@ -116,8 +163,8 @@ public class LinkedLists<T>
 
     public void outputList( )
     {
-        Node<T> position = head;
-        while (position != null)
+        Node<T> position = tail.link;
+        while (position != tail)
         {
             System.out.println(position.data);
             position = position.link;
@@ -126,12 +173,12 @@ public class LinkedLists<T>
 
     public boolean isEmpty( )
     {
-        return (head == null);
+        return (tail == null);
     }
 
     public void clear( )
     {
-        head = null;
+        tail = null;
     }
 
    /*
@@ -146,11 +193,11 @@ public class LinkedLists<T>
             return false;
         else
         {
-            LinkedLists<T> otherList = (LinkedLists<T>)otherObject;
+            LinkedList3<T> otherList = (LinkedList3<T>)otherObject;
             if (size( ) != otherList.size( ))
                 return false;
-            Node<T> position = head;
-            Node<T> otherPosition = otherList.head;
+            Node<T> position = tail;
+            Node<T> otherPosition = otherList.tail;
             while (position != null)
             {
                 if (!(position.data.equals(otherPosition.data)))

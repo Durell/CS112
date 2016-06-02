@@ -31,12 +31,38 @@ the suitor that is eliminated for each step in the process.
 
 */
 
-// imports
-
 public class Suitors
 {
 
   public static void main(String[] args)
   {
+    CList l = new CList();
+  	int i = 7;
+    System.out.println(l.size());
+  	l.add("" + i);
+  	i--;
+    System.out.println(l.size());
+  	l.add(String.valueOf(i));
+  	i--;
+  	l.add(String.valueOf(i));
+  	i--;
+  	l.add(String.valueOf(i));
+  	i--;
+  	l.add(String.valueOf(i));
+  	i--;
+  	l.add(String.valueOf(i));
+  	i--;
+  	l.add(String.valueOf(i));
+  	System.out.println(l.size());
+    CList.CIterator it = l.iterator();
+    while (l.size() > 1)
+    {
+      it.next();
+      it.next();
+      it.next();
+      it.delete();
+    }
+    System.out.print("The winner is: ");
+    l.outputList();
   }
 }

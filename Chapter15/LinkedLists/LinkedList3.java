@@ -1,6 +1,6 @@
 /*
 Chapter No. 15 - Project 6 (Page 895)
-File Name:          LinkedLists.java
+File Name:          LinkedList3.java
 Programmer:         Durell Smith
 Date Last Modified: April x, 2016
 
@@ -15,8 +15,9 @@ extend the Comparable interface. Write a suitable test program.
 */
 
 // imports
+import java.util.Random;
 
-public class LinkedLists<T>
+public class LinkedList3 <T extends Comparable>
 {
     private class Node<T>
     {
@@ -29,6 +30,12 @@ public class LinkedLists<T>
              link = null;
         }
 
+        public Node(T newData)
+        {
+             data = newData;
+             link = null;
+        }
+
         public Node(T newData, Node<T> linkValue)
         {
             data = newData;
@@ -38,7 +45,7 @@ public class LinkedLists<T>
 
     private Node<T> head;
 
-    public LinkedLists( )
+    public LinkedList3( )
     {
         head = null;
     }
@@ -50,6 +57,39 @@ public class LinkedLists<T>
     public void addToStart(T itemData)
     {
         head = new Node<T>(itemData, head);
+    }
+
+    public void addSorted(T itemData)
+    {
+        boolean added = false;
+        if(head == null)
+        {
+            addToStart(itemData);
+            added = true;
+        }
+        Node<T> position = head;
+        Node<T> previous = null;
+        while (!added)
+        {
+            if (position.data.compareTo(itemData) == 1)
+            {
+                previous = position;
+                position = position.link;
+            }
+            else if ((position.data.compareTo(itemData) < 1) && (previous == null))
+            {
+                Node<T> temp = new Node(itemData, head);
+                head = temp;
+                added = true;
+            }
+            else
+            {
+                Node<T> temp = new Node(itemData);
+                temp.link = previous.link;
+                previous.link = temp;
+                added = true;
+            }
+        }
     }
 
     /**
@@ -73,8 +113,8 @@ public class LinkedLists<T>
     public int size( )
     {
         int count = 0;
-        Node<T> position = head;
-        while (position != null)
+        Node<T> position = head.link;
+        while (position != head)
         {
             count++;
             position = position.link;
@@ -138,7 +178,7 @@ public class LinkedLists<T>
     For two lists to be equal they must contain the same data items in
     the same order. The equals method of T is used to compare data items.
    */
-   public boolean equals(Object otherObject)
+    public boolean equals(Object otherObject)
     {
         if (otherObject == null)
             return false;
@@ -146,7 +186,7 @@ public class LinkedLists<T>
             return false;
         else
         {
-            LinkedLists<T> otherList = (LinkedLists<T>)otherObject;
+            LinkedList3<T> otherList = (LinkedList3<T>)otherObject;
             if (size( ) != otherList.size( ))
                 return false;
             Node<T> position = head;
@@ -160,6 +200,31 @@ public class LinkedLists<T>
             }
             return true; //no mismatch was not found
         }
+    }
+
+    public static void main(String[] args)
+    {
+        LinkedList3 l = new LinkedList3();
+        /*
+        Random ran = new Random();
+        for (int i = 0; i < 20; i++)
+        {
+            int input = ((ran.nextInt(1000) - 300) * 2);
+            Item n = new Item(input);
+            l.addSorted(n);
+        }
+        */
+        Random ran = new Random();
+            int input = ((ran.nextInt(1000) - 300) * 2);
+            System.out.println(input);
+        Item n1 = new Item(5);
+        Item n3 = new Item(7);
+        Item n2 = new Item(input);
+        System.out.println("compareTo() output: " + n1.compareTo(n2));
+        l.addSorted(n1);
+        l.addSorted(n2);
+        l.addSorted(n3);
+        l.outputList();
     }
 
 }

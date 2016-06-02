@@ -1,6 +1,6 @@
 /*
 Chapter No. 15 - Project 6 (Page 895)
-File Name:          LinkedLists.java
+File Name:          LinkedList3.java
 Programmer:         Durell Smith
 Date Last Modified: April x, 2016
 
@@ -16,7 +16,7 @@ extend the Comparable interface. Write a suitable test program.
 
 // imports
 
-public class LinkedLists<T>
+public class CircularList<T>
 {
     private class Node<T>
     {
@@ -36,31 +36,86 @@ public class LinkedLists<T>
         }
      }//End of Node<T> inner class
 
-    private Node<T> head;
+     public class CircularIterator
+     {
+        private Node<T> position, previous;
 
-    public LinkedLists( )
+        public CircularIterator()
+        {
+            position = tail;
+            previous = null;
+        }
+
+        public void restart()
+        {
+            position = tail;
+            previous = null;
+        }
+
+        public void next()
+        {
+            previous = position;
+            position = position.link;
+        }
+
+        public void delete()
+        {
+            if (tail == null)
+                throw new IllegalStateException();
+            else if (size() == 1)
+                tail = null;
+            else
+            {
+                previous.link = position.link;
+                position = position.link;
+            }
+
+        }
+
+
+     }
+
+    private Node<T> tail;
+
+    public CircularList( )
     {
-        head = null;
+        tail = null;
+    }
+
+    public CircularIterator iterator()
+    {
+        return new CircularIterator();
     }
 
     /**
      Adds a node at the start of the list with the specified data.
      The added node will be the first node in the list.
     */
-    public void addToStart(T itemData)
+    public void add(T itemData)
     {
-        head = new Node<T>(itemData, head);
+        Node<T> newNode = new Node();
+        newNode.data = itemData;
+        if (tail == null)
+        {
+            tail = newNode;
+            tail.link = tail;
+        }
+        else
+        {
+            newNode.link = tail.link;
+            tail.link = newNode;
+        }
     }
 
     /**
-     Removes the head node and returns true if the list contains at least
+     Removes the tail node and returns true if the list contains at least
      one node. Returns false if the list is empty.
     */
     public boolean deleteHeadNode( )
     {
-        if (head != null)
+        if (tail != null)
         {
-            head = head.link;
+            tail.link = tail.link.link;
             return true;
         }
         else
@@ -73,8 +128,11 @@ public class LinkedLists<T>
     public int size( )
     {
         int count = 0;
-        Node<T> position = head;
-        while (position != null)
+        if (tail == null)
+            return count;
+        count++;
+        Node<T> position = tail.link;
+        while (position != tail)
         {
             count++;
             position = position.link;
@@ -93,9 +151,9 @@ public class LinkedLists<T>
     */
     private Node<T> find(T target)
     {
-        Node<T> position = head;
+        Node<T> position = tail.link;
         T itemAtPosition;
-        while (position != null)
+        while (position != tail)
         {
             itemAtPosition = position.data;
             if (itemAtPosition.equals(target))
@@ -116,22 +174,23 @@ public class LinkedLists<T>
 
     public void outputList( )
     {
-        Node<T> position = head;
-        while (position != null)
+        Node<T> position = tail.link;
+        while (position != tail)
         {
             System.out.println(position.data);
             position = position.link;
         }
+        System.out.println(position.data);
     }
 
     public boolean isEmpty( )
     {
-        return (head == null);
+        return (tail == null);
     }
 
     public void clear( )
     {
-        head = null;
+        tail = null;
     }
 
    /*
@@ -146,11 +205,11 @@ public class LinkedLists<T>
             return false;
         else
         {
-            LinkedLists<T> otherList = (LinkedLists<T>)otherObject;
+            CircularList<T> otherList = (CircularList<T>)otherObject;
             if (size( ) != otherList.size( ))
                 return false;
-            Node<T> position = head;
-            Node<T> otherPosition = otherList.head;
+            Node<T> position = tail;
+            Node<T> otherPosition = otherList.tail;
             while (position != null)
             {
                 if (!(position.data.equals(otherPosition.data)))

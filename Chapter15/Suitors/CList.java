@@ -1,27 +1,11 @@
-/*
-Chapter No. 15 - Project 6 (Page 895)
-File Name:          LinkedLists.java
-Programmer:         Durell Smith
-Date Last Modified: April x, 2016
 
-Problem Statement:
-
-FROM BOOK:
-Write an addSorted method for the generic linked list from Display 15.8(p.818)
-such that the method adds a new node in the correct location so that the list 
-remains in sorted order. Note that this will require that the type parameter T 
-extend the Comparable interface. Write a suitable test program.
-
-*/
-
-// imports
-
-public class LinkedLists<T>
+public class CList
 {
-    private class Node<T>
+
+    private class Node
     {
-        private T data;
-        private Node<T> link;
+        private String data;
+        private Node link;
 
         public Node( )
         {
@@ -29,38 +13,78 @@ public class LinkedLists<T>
              link = null;
         }
 
-        public Node(T newData, Node<T> linkValue)
+        public Node(String newData, Node linkValue)
         {
             data = newData;
             link = linkValue;
         }
-     }//End of Node<T> inner class
+     }//End of Node inner class
 
-    private Node<T> head;
-
-    public LinkedLists( )
+    public class CIterator
     {
-        head = null;
+        private Node position, previous;
+        public void next()
+        {
+            previous = position;
+            position = position.link;
+        }
+
+        public void delete()
+        {
+            if (tail == null)
+                throw new IllegalStateException();
+            else if (size() == 1)
+                tail = null;
+            else
+            {
+                previous.link = position.link;
+                position = position.link;
+            }
+
+        }
+    }
+
+    private Node tail;
+
+    public CIterator iterator()
+    {
+        return new CIterator();
+    }
+
+    public CList()
+    {
+        tail = null;
     }
 
     /**
      Adds a node at the start of the list with the specified data.
      The added node will be the first node in the list.
     */
-    public void addToStart(T itemData)
+    public void add(String itemData)
     {
-        head = new Node<T>(itemData, head);
+        Node s = new Node();
+        s.data = itemData;
+        if (tail == null)
+        {
+            tail = s;
+            tail.link = tail;
+        }
+        else
+        {
+            s.link = tail.link;
+            tail.link = s;
+        }
     }
 
     /**
-     Removes the head node and returns true if the list contains at least
+     Removes the tail node and returns true if the list contains at least
      one node. Returns false if the list is empty.
     */
     public boolean deleteHeadNode( )
     {
-        if (head != null)
+        if (tail != null)
         {
-            head = head.link;
+            tail = tail.link.link;
             return true;
         }
         else
@@ -73,7 +97,7 @@ public class LinkedLists<T>
     public int size( )
     {
         int count = 0;
-        Node<T> position = head;
+        Node position = tail;
         while (position != null)
         {
             count++;
@@ -82,7 +106,7 @@ public class LinkedLists<T>
         return count;
     }
 
-    public boolean contains(T item)
+    public boolean contains(String item)
     {
         return (find(item) != null);
     }
@@ -91,10 +115,10 @@ public class LinkedLists<T>
      Finds the first node containing the target item, and returns a
      reference to that node. If target is not in the list, null is returned.
     */
-    private Node<T> find(T target)
+    private Node find(String target)
     {
-        Node<T> position = head;
-        T itemAtPosition;
+        Node position = tail;
+        String itemAtPosition;
         while (position != null)
         {
             itemAtPosition = position.data;
@@ -109,14 +133,14 @@ public class LinkedLists<T>
      Finds the first node containing the target and returns a reference
       to the data in that node. If target is not in the list, null is returned.
     */
-    public T findData(T target)
+    public String findData(String target)
     {
         return find(target).data;
     }
 
     public void outputList( )
     {
-        Node<T> position = head;
+        Node position = tail;
         while (position != null)
         {
             System.out.println(position.data);
@@ -126,12 +150,12 @@ public class LinkedLists<T>
 
     public boolean isEmpty( )
     {
-        return (head == null);
+        return (tail == null);
     }
 
     public void clear( )
     {
-        head = null;
+        tail = null;
     }
 
    /*
@@ -146,11 +170,11 @@ public class LinkedLists<T>
             return false;
         else
         {
-            LinkedLists<T> otherList = (LinkedLists<T>)otherObject;
+            CList otherList = (CList)otherObject;
             if (size( ) != otherList.size( ))
                 return false;
-            Node<T> position = head;
-            Node<T> otherPosition = otherList.head;
+            Node position = tail;
+            Node otherPosition = otherList.tail;
             while (position != null)
             {
                 if (!(position.data.equals(otherPosition.data)))

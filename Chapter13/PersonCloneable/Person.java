@@ -22,9 +22,18 @@ import java.util.Scanner;
 
 public class Person implements Cloneable
 {
+
   private String name;
   private Date born;
   private Date died;//null indicates still alive.
+
+  public Person(String n)
+  {
+  	name = n;
+  	born = new Date();
+  	born.readInput();
+  	died = null;
+  }
 
   public Person(String initialName, Date birthDate, Date deathDate)
   {
@@ -61,6 +70,19 @@ public class Person implements Cloneable
         died = new Date(original.died);
   }
 
+  public Person clone()
+  {
+  		String n = name;
+  		Date newBirth = new Date(born);
+  		Date newDied;
+  		if (!(died == null))
+  			newDied = new Date(died);
+  		else
+  			newDied = null;
+  		Person newPerson = new Person(n, newBirth, newDied);
+  		return newPerson;
+  }
+
   public void set(String newName, Date birthDate, Date deathDate)
   {
   	if (consistent(birthDate, deathDate))
@@ -83,7 +105,7 @@ public class Person implements Cloneable
   {
     String diedString;
     if (died == null)
-        diedString = ""; //Empty string
+        diedString = "Present"; //Empty string
     else
         diedString = died.toString( );
 
@@ -126,6 +148,11 @@ public class Person implements Cloneable
       System.out.println("Inconsistent dates. Aborting.");
       System.exit(0);
     }
+  }
+
+  public void setBirth()
+  {
+  	born.readInput();
   }
 
   /**
@@ -227,7 +254,10 @@ public class Person implements Cloneable
                   || birthDate.equals(deathDate ));
   }
 
-	private class Date
+  /**
+   Date moved to be a private inner class of Person
+  */
+	private class Date implements Cloneable
 	{
 	  private String month;
 	  private int day;
@@ -266,6 +296,15 @@ public class Person implements Cloneable
 	    day = aDate.day;
 	    year = aDate.year;
 	  }
+
+	  public Date clone()
+	  {
+  			String n = name;
+  			int d = day;
+  			int y = year;
+  			Date newDate = new Date(n, d, y);
+  			return newDate;
+  	}
 	
 	  public void setDate(int monthInt, int day, int year)
 	  {
