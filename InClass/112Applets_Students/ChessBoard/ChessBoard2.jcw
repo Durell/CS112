@@ -1,0 +1,16 @@
+<?xml?>
+<workspace>
+	<settings>
+		<label>ChessBoard</label>
+	</settings>
+	<users>
+		<user>
+			<path>ChessBoard2.jcu</path>
+		</user>
+	</users>
+	<projects>
+		<project>
+			<path>ChessBoard.jcp</path>
+		</project>
+	</projects>
+</workspace>
